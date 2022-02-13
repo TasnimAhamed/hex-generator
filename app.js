@@ -1,33 +1,38 @@
 /**
  * @Title Change the background color by generating Hex color
- * @feature Copy the hex code
- * @Steps
- * @first => Create onload Handler
- * @second => Random Color Generator function
- * @Third => Collect all necessary references
- * @fourth => Handle the click event
+ * @feature Add a button to Copy the hex code
+ * @steps
+ * @step1 => Create onload Handler
+ * @step2 => Random Color Generator function
+ * @step3 => Collect all necessary references
+ * @step4 => Handle the click event
+ * @step5 => Handle the click event
  */
 
 /**
- * @first
+ * @step1
  */
 window.onload = ()=>{
     main();
 }
 function main(){
     const root=document.getElementById('root');
-    const btn=document.getElementById('change-color');
-    const output=document.getElementById('output');
-    btn.addEventListener('click',function(){
+    const changeBtn=document.getElementById('change-color');
+    const outputBtn=document.getElementById('output');
+    const copyBtn=document.getElementById('copy-btn');
+    changeBtn.addEventListener('click',function(){
         const bgColor=generatorHEXColor();
-        output.value=bgColor;
+        outputBtn.value=bgColor;
         root.style.backgroundColor=bgColor;
+    })
+    copyBtn.addEventListener('click',function(){
+        window.navigator.clipboard.writeText(outputBtn.value)
     })
 }
 
 
 /**
- * @second
+ * @step2
  */
 
 function generatorHEXColor(){
@@ -37,4 +42,8 @@ function generatorHEXColor(){
     return `#${red}${green}${blue}`;
 }
 
+
+/**
+*@step5 
+*/
 
