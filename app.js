@@ -7,6 +7,7 @@
  * @step3 => Collect all necessary references
  * @step4 => Handle the click event
  * @step5 => Handle the click event
+ * @step6 => Add a toast message when color copied
  */
 
 /**
@@ -18,15 +19,16 @@ window.onload = ()=>{
 function main(){
     const root=document.getElementById('root');
     const changeBtn=document.getElementById('change-color');
-    const outputBtn=document.getElementById('output');
+    const output=document.getElementById('output');
     const copyBtn=document.getElementById('copy-btn');
     changeBtn.addEventListener('click',function(){
         const bgColor=generatorHEXColor();
-        outputBtn.value=bgColor;
+        output.value=bgColor;
         root.style.backgroundColor=bgColor;
     })
     copyBtn.addEventListener('click',function(){
-        window.navigator.clipboard.writeText(outputBtn.value)
+        window.navigator.clipboard.writeText(output.value)
+        generateToastMessage(`${output.value} copied`)
     })
 }
 
@@ -44,6 +46,31 @@ function generatorHEXColor(){
 
 
 /**
-*@step5 
+*@step6
 */
+function generateToastMessage(message){
+    const div=document.createElement('div')
+    div.className='toast-message  toast-message-slide-in';
+    div.innerText=message;
+    
+    div.addEventListener('click',function(){
+        div.classList.remove('toast-message-slide-in');
+        div.classList.add('toast-message-slide-out');
+
+        div.addEventListener('animationend',function(){
+            div.remove();
+        })
+
+    })
+    setTimeout(function(){
+        div.classList.remove('toast-message-slide-in');
+        div.classList.add('toast-message-slide-out');
+
+        div.addEventListener('animationend',function(){
+            div.remove();
+        })
+    },2500)
+    
+    document.body.appendChild(div);
+}
 
