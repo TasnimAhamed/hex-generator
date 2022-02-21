@@ -24,13 +24,25 @@ function main(){
     const copyBtn=document.getElementById('copy-btn');
     changeBtn.addEventListener('click',function(){
         const bgColor=generatorHEXColor();
-        output.value=bgColor;
+        output.value=bgColor.toUpperCase();
         root.style.backgroundColor=bgColor;
     })
     copyBtn.addEventListener('click',function(){
-        window.navigator.clipboard.writeText(output.value)
-        if(isValidHexCode(output.value)){
-            generateToastMessage(`${output.value} copied`)
+        color=output.value;
+        if(color[0]==='#'){
+            window.navigator.clipboard.writeText(color)
+        }
+        else{
+            window.navigator.clipboard.writeText(`#${color}`)
+        }
+
+        if(isValidHexCode(color)){
+            if(color[0]==='#'){
+                generateToastMessage(`${color} copied`)
+            }
+            else{
+                generateToastMessage(`#${color} copied`)
+            }
         }
         else{
             alert("Invalid Color Code.");
@@ -38,9 +50,19 @@ function main(){
     })
     output.addEventListener('keyup',function(e){
         const color=e.target.value;
-        if(color && isValidHexCode(color)){
-            root.style.backgroundColor=color;
+        if(color){
+            output.value=color.toUpperCase();
+            if(color[0]==='#' && isValidHexCode(color)){
+                root.style.backgroundColor=color;
+            }
+            else{
+                if(isValidHexCode(color)){
+                    root.style.backgroundColor=`#${color}`;
+                }
+            }
+            
         }
+        
     })
 }
 
@@ -87,9 +109,12 @@ function generateToastMessage(message){
 }
 
 function isValidHexCode(color){
-    if(color.length!==7) return false;
-    if(color[0]!=='#') return false;
-    color=color.substring(1)
+    if(color[0]=='#'){
+        if(color.length!==7) return false;
+        color=color.substring(1)
+    }else{
+        if(color.length!==6) return false;
+    }
     return /^[0-9A-Fa-f]{6}$/i.test(color); //Regex
 }
 
