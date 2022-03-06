@@ -39,7 +39,7 @@ function main(){
     })
 
     copyBtn.addEventListener('click',function(){
-        console.log(hexColorMode.checked)
+        
         if(hexColorMode.checked){
             const color=hexInput.value;
             if(color[0]==='#'){
@@ -86,6 +86,7 @@ function main(){
                 }
                 adjustRGBColor(decimalColor)
                 rgbInput.value=generateRGBColor(decimalColor)
+        
                 colorDisplay.style.backgroundColor=`#${color}`;
             }
             
