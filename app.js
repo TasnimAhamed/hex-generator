@@ -84,6 +84,7 @@ function main(){
                     green:parseInt(arrayColor[1],16),
                     blue:parseInt(arrayColor[2],16),
                 }
+                adjustRGBColor(decimalColor)
                 rgbInput.value=generateRGBColor(decimalColor)
                 colorDisplay.style.backgroundColor=`#${color}`;
             }
@@ -192,10 +193,6 @@ function generateToastMessage(message){
     
     document.body.appendChild(div);
 }
-
-
-
-
 
 
 function isValidHexCode(color){
