@@ -148,26 +148,26 @@ body{
     user-select: none;
 }
 
-.toast-message{
+.toast__message{
     position: fixed;
     top: 2rem;
     right: 2rem;
-    background-color: rgb(19,201,110);
+    background-color: #fff;
     color: #000;
-    border:1px solid #fff;
+    border:1px solid #dddeee;
     border-radius: 0.25rem;
     padding:0.5rem 1rem;
     color: pointer;
     font-size:1rem;
     z-index: 999;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)
 }
 
-.toast-message-slide-in{
+.toast__message-slide-in{
     animation: toast-animation-in 0.5s ease-in;
 }
 
-.toast-message-slide-out{
+.toast__message-slide-out{
     animation: toast-animation-out 0.5s ease-out;
 }
 @keyframes toast-animation-in{

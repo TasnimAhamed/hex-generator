@@ -9,54 +9,71 @@ window.onload = ()=>{
     main();
 }
 function main(){
-    const root=document.getElementById('root');
-    const changeBtn=document.getElementById('change-color');
-    const output=document.getElementById('output');
-    const output2=document.getElementById('output2');
+
+    const colorDisplay=document.getElementById('color-display');
+    const randomColor=document.getElementById('random-color');
+
+    const hexInput=document.getElementById('input-hex');
+    const rgbInput=document.getElementById('input-rgb');
+    
     const copyBtn=document.getElementById('copy-btn');
-    const copyBtn2=document.getElementById('copy-btn2');
-    changeBtn.addEventListener('click',function(){
+    
+    const hexColorMode=document.getElementById('hex-color-mode');
+
+    const colorSliderRed=document.getElementById('color-slider-red');
+    const colorSliderGreen=document.getElementById('color-slider-green');
+    const colorSliderBlue=document.getElementById('color-slider-blue');
+
+    const redValue=document.getElementById('red-value')
+    const greenValue=document.getElementById('green-value')
+    const blueValue=document.getElementById('blue-value')
+
+    randomColor.addEventListener('click',function(){
         const decimalColor=generatorDecimalColor();
-        const bgHexColor=generatorHEXColor(decimalColor).toUpperCase();
-        const bgRGBColor=generatorRGBColor(decimalColor);
-        output.value=bgHexColor;
-        output2.value=bgRGBColor;
-        root.style.backgroundColor=bgHexColor;
+        const bgHexColor=generateHexColor(decimalColor).toUpperCase();
+        const bgRGBColor=generateRGBColor(decimalColor);
+        adjustRGBColor(decimalColor)
+        hexInput.value=bgHexColor;
+        rgbInput.value=bgRGBColor;
+        colorDisplay.style.backgroundColor=bgHexColor;
     })
 
     copyBtn.addEventListener('click',function(){
-
-        const color=output.value;
-        if(color[0]==='#'){
-            window.navigator.clipboard.writeText(color)
-        }
-        else{
-            window.navigator.clipboard.writeText(`#${color}`)
-        }
-
-        if(isValidHexCode(color)){
+        console.log(hexColorMode.checked)
+        if(hexColorMode.checked){
+            const color=hexInput.value;
             if(color[0]==='#'){
-                generateToastMessage(`${color} copied`)
+                window.navigator.clipboard.writeText(color)
             }
             else{
-                generateToastMessage(`#${color} copied`)
+                window.navigator.clipboard.writeText(`#${color}`)
+            }
+
+            //Generate toast message
+            if(isValidHexCode(color)){
+                if(color[0]==='#'){
+                    generateToastMessage(`${color} copied`)
+                }
+                else{
+                    generateToastMessage(`#${color} copied`)
+                }
+            }
+            else{
+                alert("Invalid Color Code.");
             }
         }
         else{
-            alert("Invalid Color Code.");
+            const color=rgbInput.value;
+            window.navigator.clipboard.writeText(color)
+            generateToastMessage(`${color} copied`)
         }
+
     })
 
-    copyBtn2.addEventListener('click',function(){
-        const color=output2.value;
-        window.navigator.clipboard.writeText(color)
-        generateToastMessage(`${color} copied`)
-    })
-
-    output.addEventListener('keyup',function(e){
+    hexInput.addEventListener('keyup',function(e){
         let color=e.target.value;
         if(color){
-            output.value=color.toUpperCase();
+            hexInput.value=color.toUpperCase();
             if(color[0]==='#'){
                 color=color.substring(1)
             }
@@ -67,44 +84,97 @@ function main(){
                     green:parseInt(arrayColor[1],16),
                     blue:parseInt(arrayColor[2],16),
                 }
-                output2.value=generatorRGBColor(decimalColor)
-                root.style.backgroundColor=`#${color}`;
+                rgbInput.value=generateRGBColor(decimalColor)
+                colorDisplay.style.backgroundColor=`#${color}`;
             }
             
         }
-        
+
     })
+
+    colorSliderRed.addEventListener('change',function(e){
+
+        const red=parseInt(e.target.value)
+        const green=parseInt(colorSliderGreen.value)
+        const blue=parseInt(colorSliderBlue.value)
+        
+
+        adjustRGBColor({red,green,blue})
+
+    })
+
+    colorSliderGreen.addEventListener('change',function(e){
+        const red=parseInt(colorSliderRed.value)
+        const green=parseInt(e.target.value)
+        const blue=parseInt(colorSliderBlue.value)
+        
+
+        adjustRGBColor({red,green,blue})
+
+    })
+    colorSliderBlue.addEventListener('change',function(e){
+        const red=parseInt(colorSliderRed.value)
+        const green=parseInt(colorSliderGreen.value)
+        const blue=parseInt(e.target.value)
+        
+
+        adjustRGBColor({red,green,blue})
+
+    })
+
+    function adjustRGBColor(colors){
+
+        redValue.innerText=colors.red
+        greenValue.innerText=colors.green
+        blueValue.innerText=colors.blue
+
+        colorSliderRed.value=colors.red
+        colorSliderGreen.value=colors.green
+        colorSliderBlue.value=colors.blue
+
+
+        hexInput.value=generateHexColor(colors).toUpperCase()
+        rgbInput.value=generateRGBColor(colors)
+        colorDisplay.style.backgroundColor=hexInput.value;
+    }
+
+    
 }
 
+
 function generatorDecimalColor(){
-    const red= Math.round(Math.random()*255+1);
-    const green= Math.round(Math.random()*255+1);
-    const blue= Math.round(Math.random()*255+1);
+    const red= Math.floor(Math.random()*255+1);
+    const green= Math.floor(Math.random()*255+1);
+    const blue= Math.floor(Math.random()*255+1);
     return {
         red,
         green,
         blue
     }
 }
-function generatorHEXColor({red, green, blue}){
+
+
+function generateHexColor({red, green, blue}){
     const validHexCode=(color)=>{
         let hex=color.toString(16);
         return hex.length==1 ? `0${hex}`:hex;
     }
     return `#${validHexCode(red)}${validHexCode(green)}${validHexCode(blue)}`;
 }
-function generatorRGBColor({red, green, blue}){
+
+
+function generateRGBColor({red, green, blue}){
     return `rgb(${red}, ${green}, ${blue})`;
 }
 
 function generateToastMessage(message){
     const div=document.createElement('div')
-    div.className='toast-message  toast-message-slide-in';
+    div.className='toast__message  toast__message-slide-in';
     div.innerText=message;
     
     div.addEventListener('click',function(){
-        div.classList.remove('toast-message-slide-in');
-        div.classList.add('toast-message-slide-out');
+        div.classList.remove('toast__message-slide-in');
+        div.classList.add('toast__message-slide-out');
 
         div.addEventListener('animationend',function(){
             div.remove();
@@ -112,8 +182,8 @@ function generateToastMessage(message){
 
     })
     setTimeout(function(){
-        div.classList.remove('toast-message-slide-in');
-        div.classList.add('toast-message-slide-out');
+        div.classList.remove('toast__message-slide-in');
+        div.classList.add('toast__message-slide-out');
 
         div.addEventListener('animationend',function(){
             div.remove();
@@ -122,6 +192,9 @@ function generateToastMessage(message){
     
     document.body.appendChild(div);
 }
+
+
+
 
 
 
