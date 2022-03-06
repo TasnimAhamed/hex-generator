@@ -8,7 +8,128 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <div class="container" id="root">
+
+
+    <div class="main__wrapper">
+        <div class="container">
+            <!--Display Section-->
+            <section class="section">
+                <div class="section__header">
+                    <h3 class="section__title">Display Color</h3>
+                    <button class="section__header-action">Random Color</button>
+                </div>
+                <div class="section__divider"></div>
+                <div class="color__display"></div>
+            </section>
+    
+            <!--Change & Copy Color-->
+            <section class="section">
+                <div class="section__header">
+                    <h3 class="section__title">Change & Copy Color</h3>
+                    <button class="section__header-action">Copy to Clipboard</button>
+                </div>
+                <div class="section__divider"></div>
+                <div class="select__copy-mode">
+                    <p class="lead">Select Copy Mode</p>
+                    <div class="mode__radio-group">
+                        <div class="mode__input-group">
+                            <input 
+                                type="radio"
+                                name="color-mode"
+                                id="color-mode-hex"
+                                checked
+                            />
+                            <label for="color-mode-hex">Hex</label>
+                        </div>
+                        <div class="mode__input-group">
+                            <input 
+                                type="radio"
+                                name="color-mode"
+                                id="color-mode-rgb"
+                            />
+                            <label for="color-mode-rgb">RGB</label>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="select__color-code">
+                    <div class="hex__input-group">
+                        <label for="input-hex" class="lead">Hex</label>
+                        <input 
+                            type="text"
+                            value="#dddeee"
+                            placeholder="input-hex"
+                            id="input-hex"
+                            class="text__input hex__input"
+                        />
+                    </div>
+                    <div class="rgb__input-group">
+                        <label for="input-rgb" class="lead">RGB</label>
+                        <input 
+                            type="text"
+                            value="rgb( 221, 222, 238)"
+                            placeholder="rgb( 221, 222, 238)"
+                            id="input-rgb"
+                            class="text__input rgb__input"
+                            disabled
+                        />
+                    </div>
+                </div>
+                
+                <div class="color__sliders">
+                    <p class="lead">Adjust RGB Colors</p>
+                    <div class="color__sliders-group">
+                        <div>
+                            <div class="slider__label-group">
+                                <p>Red</p>
+                                <p id="red-value">221</p>
+                            </div>
+                            <input 
+                                type="range"
+                                min="0"
+                                max="255"
+                                value="221"
+                                class="color__slider color__slider--red"
+                                id="color-slider-red"
+                            />
+                        </div>
+                        <div>
+                            <div class="slider__label-group">
+                                <p>Green</p>
+                                <p id="green-value">222</p>
+                            </div>
+                            <input 
+                                type="range"
+                                min="0"
+                                max="255"
+                                value="222"
+                                class="color__slider color__slider--green"
+                                id="color-slider-green"
+                            />
+                        </div>
+                        <div>
+                            <div class="slider__label-group">
+                                <p>Red</p>
+                                <p id="blue-value">238</p>
+                            </div>
+                            <input 
+                                type="range"
+                                min="0"
+                                max="255"
+                                value="238"
+                                class="color__slider color__slider--blue"
+                                id="color-slider-blue"
+                            />
+                        </div>
+                    </div>
+                </div>
+    
+            </section>
+        </div>
+    </div>
+
+
+    <!-- <div class="container" id="root">
         <h1>Change The Background Color By Clicking The Following Button</h1>
         <h3>Hex Code</h3>
         <div>
@@ -21,9 +142,9 @@
             <button type="button" id="copy-btn2">copy</button>
         </div>
         <button id="change-color">Change Color</button>
-    </div>
+    </div> -->
 
 
-    <script src="./app.js"></script>
+    <script src="./app.js" defer></script>
 </body>
 </html>
