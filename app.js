@@ -6,10 +6,40 @@
 
 //Globals
 
+const defaultPresetColors = [
+	'#ffcdd2',
+	'#f8bbd0',
+	'#e1bee7',
+	'#ff8a80',
+	'#ff80ab',
+	'#ea80fc',
+	'#b39ddb',
+	'#9fa8da',
+	'#90caf9',
+	'#b388ff',
+	'#8c9eff',
+	'#82b1ff',
+	'#03a9f4',
+	'#00bcd4',
+	'#009688',
+	'#80d8ff',
+	'#84ffff',
+	'#a7ffeb',
+	'#c8e6c9',
+	'#dcedc8',
+	'#f0f4c3',
+	'#b9f6ca',
+	'#ccff90',
+	'#ffcc80',
+];
+
+const copySound= new Audio('./copy-sound.wav')
+console.log(copySound)
 
 //Onlaod handler
 window.onload = ()=>{
     main();
+    presetColorParent(defaultPresetColors)
 }
 
 //Main or boot function
@@ -17,16 +47,14 @@ window.onload = ()=>{
 function main(){
 
     const randomColorGeneratorBtn=document.getElementById('random-color');
-    
-    const copyColorBtn=document.getElementById('copy-btn');
-
     const hexInput=document.getElementById('input-hex')
+    const copyColorBtn=document.getElementById('copy-btn');
+    const presetColorParentBtn=document.getElementById('preset-colors')
 
     randomColorGeneratorBtn.addEventListener('click',randomColorGenerator)
-
-    copyColorBtn.addEventListener('click',copyRandomColor)
-
     hexInput.addEventListener('keyup',hexInputColor)
+    copyColorBtn.addEventListener('click',copyRandomColor)
+    presetColorParentBtn.addEventListener('click', presetColorCopy)
     
     document.getElementById('color-slider-red').addEventListener('change',sliderColorChange);
     document.getElementById('color-slider-green').addEventListener('change',sliderColorChange);
@@ -64,6 +92,37 @@ function hexInputColor(e){
     }
 }
 
+function copyRandomColor(){
+
+    copySound.volume=.1
+    copySound.play()
+
+    const hexColorMode=document.getElementById('hex-color-mode');
+    const hexInput=document.getElementById('input-hex')
+    const rgbInput=document.getElementById('input-rgb')
+
+    if(hexColorMode.checked){
+        const color=hexInput.value;
+        if(color[0]==='#' && isValidHexCode(color)){
+            window.navigator.clipboard.writeText(color)
+            generateToastMessage(`${color} copied`)
+        }
+        else if(color[0]!=='#' && isValidHexCode(color)){
+            window.navigator.clipboard.writeText(`#${color}`)
+            generateToastMessage(`#${color} copied`)
+        }
+        else{
+            generateToastMessage("Invalid Color Code.");
+        }
+        
+    }
+    else{
+        window.navigator.clipboard.writeText(rgbInput.value)
+        generateToastMessage(`${rgbInput.value} copied`)
+    }
+
+}
+
 
 function sliderColorChange(){
     const color ={
@@ -74,49 +133,29 @@ function sliderColorChange(){
     updateColorCodeToDOM(color)
 }
 
-function copyRandomColor(){
-
-    const hexColorMode=document.getElementById('hex-color-mode');
-    const hexInput=document.getElementById('input-hex')
-    const rgbInput=document.getElementById('input-rgb')
-
-    if(hexColorMode.checked){
-        const color=hexInput.value;
-        if(color[0]==='#'){
-            window.navigator.clipboard.writeText(color)
-        }
-        else{
-            window.navigator.clipboard.writeText(`#${color}`)
-        }
-
-        //Generate toast message
-        if(isValidHexCode(color)){
-            if(color[0]==='#'){
-                generateToastMessage(`${color} copied`)
-            }
-            else{
-                generateToastMessage(`#${color} copied`)
-            }
-        }
-        else{
-            alert("Invalid Color Code.");
-        }
-    }
-    else{
-        const color=rgbInput.value;
-        window.navigator.clipboard.writeText(color)
-        generateToastMessage(`${color} copied`)
-    }
-
+function presetColorParent(colors){
+    const presetParent=document.getElementById('preset-colors')
+    colors.forEach((color)=>{
+        const colorBox=generateColorBox(color)
+        presetParent.appendChild(colorBox)
+    })
 }
 
+
+function presetColorCopy(e){
+    const child=e.target
+    if(child.className === 'color__box'){
+        window.navigator.clipboard.writeText(child.getAttribute('data-color'))
+        generateToastMessage(`${child.getAttribute('data-color')} Copied`)
+        copySound.volume=.1
+        copySound.play()
+    }
+}
 
 
 //DOM functions
 
 function updateColorCodeToDOM(color){
-
-    console.log(color)
 
     const hexColor=generateHexColor(color).toUpperCase();
     const rgbColor=generateRGBColor(color);
@@ -163,6 +202,17 @@ function generateToastMessage(message){
     },1500)
     
     document.body.appendChild(div);
+}
+
+//Generate Color Box
+
+function generateColorBox(color){
+    const div=document.createElement('div')
+    div.className='color__box'
+    div.style.backgroundColor=color
+    div.setAttribute('data-color', color)
+
+    return div
 }
 
 
